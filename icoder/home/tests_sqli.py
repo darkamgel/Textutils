@@ -47,7 +47,7 @@ class SearchSQLInjectionTestCase(TestCase):
                 self.assertIn(response.status_code, [200, 500])
 
     def test_classic_sqli_or_true_returns_all_posts(self):
-        response = self.client.get(reverse("search"), {"query": "' OR '1'='1"})
+        response = self.client.get(reverse("search"), {"query": "0 OR 1=1"})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context["allPosts"].count(), 2)
 

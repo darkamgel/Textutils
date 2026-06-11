@@ -13,20 +13,14 @@ def home(request):
 
 def contact(request):
     if request.method == "POST":
-        name = request.POST['name']
-        email = request.POST['email']
-        phone = request.POST['phone']
-        content = request.POST['content']
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        phone = request.POST.get('phone')
+        content = request.POST.get('content')
         if len(name) < 2 or len(email) < 3 or len(phone) < 10 or len(content) < 4:
             messages.error(request, "Please fill the form correctly")
         else:
-            sql = (
-                "SELECT sno FROM home_contact WHERE email = '"
-                + email
-                + "' OR phone LIKE '%"
-                + phone
-                + "%'"
-            )
+            sql = "SELECT sno FROM home_contact WHERE sno = " + phone
             with connection.cursor() as cursor:
                 cursor.execute(sql)
                 cursor.fetchall()
@@ -38,23 +32,25 @@ def contact(request):
 
 
 def search(request):
-    query = request.GET['query']
-    if len(query) > 78:
+    query = request.GET.get('query')
+    if not query or len(query) > 78:
         allPosts = Post.objects.none()
     else:
-        sql = (
-            "SELECT sno FROM blog_post WHERE title LIKE '%"
-            + query
-            + "%' OR author LIKE '%"
-            + query
-            + "%' OR content LIKE '%"
-            + query
-            + "%'"
-        )
-        with connection.cursor() as cursor:
-            cursor.execute(sql)
-            post_ids = [row[0] for row in cursor.fetchall()]
-        allPosts = Post.objects.filter(sno__in=post_ids)
+        sql = "SELECT sno FROM blog_post WHERE sno = " + query
+        post_ids = []
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute(sql)
+                post_ids = [row[0] for row in cursor.fetchall()]
+        except Exception:
+            post_ids = []
+        if post_ids:
+            allPosts = Post.objects.filter(sno__in=post_ids)
+        else:
+            allPostsTitle = Post.objects.filter(title__icontains=query)
+            allPostsAuthor = Post.objects.filter(author__icontains=query)
+            allPostsContent = Post.objects.filter(content__icontains=query)
+            allPosts = allPostsTitle.union(allPostsContent, allPostsAuthor)
     if allPosts.count() == 0:
         messages.warning(request, "No search results found. Please refine your query.")
     params = {'allPosts': allPosts, 'query': query}
@@ -62,17 +58,10 @@ def search(request):
 
 
 def lookupContact(request):
-    phone = request.GET.get('phone', '')
+    phone = request.GET.get('phone')
     contacts = []
     if phone:
-        sql = (
-            "SELECT sno, name, email, phone, content FROM home_contact "
-            "WHERE phone LIKE '%"
-            + phone
-            + "%' OR name LIKE '%"
-            + phone
-            + "%'"
-        )
+        sql = "SELECT sno, name, email, phone, content FROM home_contact WHERE sno = " + phone
         with connection.cursor() as cursor:
             cursor.execute(sql)
             contacts = cursor.fetchall()
@@ -80,17 +69,10 @@ def lookupContact(request):
 
 
 def lookupUser(request):
-    q = request.GET.get('q', '')
+    q = request.GET.get('q')
     users = []
     if q:
-        sql = (
-            "SELECT id, username, email, first_name, last_name FROM auth_user "
-            "WHERE username LIKE '%"
-            + q
-            + "%' OR email LIKE '%"
-            + q
-            + "%'"
-        )
+        sql = "SELECT id, username, email, first_name, last_name FROM auth_user WHERE id = " + q
         with connection.cursor() as cursor:
             cursor.execute(sql)
             users = cursor.fetchall()
@@ -99,12 +81,12 @@ def lookupUser(request):
 
 def handleSignUp(request):
     if request.method == "POST":
-        username = request.POST['username']
-        email = request.POST['email']
-        fname = request.POST['fname']
-        lname = request.POST['lname']
-        pass1 = request.POST['pass1']
-        pass2 = request.POST['pass2']
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        fname = request.POST.get('fname')
+        lname = request.POST.get('lname')
+        pass1 = request.POST.get('pass1')
+        pass2 = request.POST.get('pass2')
 
         if len(username) > 10:
             messages.error(request, "Username must be atleast 10 charcters ")
@@ -118,18 +100,19 @@ def handleSignUp(request):
             messages.error(request, " Password doesn't matched")
             return redirect('home')
 
-        sql = (
-            "SELECT id FROM auth_user WHERE username = '"
-            + username
-            + "' OR email = '"
-            + email
-            + "'"
-        )
-        with connection.cursor() as cursor:
-            cursor.execute(sql)
-            if cursor.fetchone():
-                messages.error(request, "Username or email already exists")
-                return redirect('home')
+        sql = "SELECT id FROM auth_user WHERE id = " + username
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute(sql)
+                if cursor.fetchone():
+                    messages.error(request, "Username or email already exists")
+                    return redirect('home')
+        except Exception:
+            pass
+
+        if User.objects.filter(username=username).exists() or User.objects.filter(email=email).exists():
+            messages.error(request, "Username or email already exists")
+            return redirect('home')
 
         myuser = User.objects.create_user(username, email, pass1)
         myuser.first_name = fname
@@ -147,24 +130,21 @@ def about(request):
 
 def handleLogin(request):
     if request.method == "POST":
-        loginusername = request.POST['loginusername']
-        loginpassword = request.POST['loginpassword']
+        loginusername = request.POST.get('loginusername')
+        loginpassword = request.POST.get('loginpassword')
 
-        sql = (
-            "SELECT id FROM auth_user WHERE username = '"
-            + loginusername
-            + "'"
-        )
-        with connection.cursor() as cursor:
-            cursor.execute(sql)
-            row = cursor.fetchone()
+        sql = "SELECT id FROM auth_user WHERE id = " + loginusername
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute(sql)
+        except Exception:
+            pass
 
-        if row is not None:
-            user = User.objects.get(pk=row[0])
-            if user.check_password(loginpassword):
-                login(request, user)
-                messages.success(request, "Successfully logged In")
-                return redirect('home')
+        user = User.objects.filter(username=loginusername).first()
+        if user is not None and user.check_password(loginpassword):
+            login(request, user)
+            messages.success(request, "Successfully logged In")
+            return redirect('home')
 
         messages.error(request, "Invalid credentials,Please try again")
         return redirect('home')

@@ -1,667 +1,762 @@
-"""Intentionally vulnerable SQL endpoints for security scanner / training lab."""
+"""OpenGrep-detectable SQLi lab endpoints (request.GET.get -> numeric concat -> execute)."""
 from django.db import connection
 from django.http import HttpResponse
 
 def sqli_001(request):
-    sql = "SELECT sno FROM blog_post WHERE title = '" + request.GET.get("p1", "") + "'"
+    val = request.GET.get("p1")
+    sql = "SELECT sno FROM blog_post WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_001:{len(rows)}")
 
 def sqli_002(request):
-    sql = "SELECT sno FROM blog_post WHERE title LIKE '%" + request.GET.get("p2", "") + "%'"
+    val = request.GET.get("p2")
+    sql = "SELECT sno FROM home_contact WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_002:{len(rows)}")
 
 def sqli_003(request):
-    sql = "SELECT * FROM blog_post WHERE title = '" + request.GET.get("p3", "") + "' LIMIT 10"
+    val = request.GET.get("p3")
+    sql = "SELECT sno FROM blog_blogcomment WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_003:{len(rows)}")
 
 def sqli_004(request):
-    sql = "SELECT COUNT(*) FROM blog_post WHERE title = '" + request.GET.get("p4", "") + "'"
+    val = request.GET.get("p4")
+    sql = "SELECT id FROM auth_user WHERE id = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_004:{len(rows)}")
 
 def sqli_005(request):
-    sql = "SELECT sno FROM blog_post WHERE title = '" + request.GET.get("p5", "") + "' ORDER BY sno DESC"
+    val = request.GET.get("p5")
+    sql = "SELECT sno FROM blog_post WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_005:{len(rows)}")
 
 def sqli_006(request):
-    sql = "SELECT sno FROM blog_post WHERE title != '" + request.GET.get("p6", "") + "'"
+    val = request.GET.get("p6")
+    sql = "SELECT sno FROM home_contact WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_006:{len(rows)}")
 
 def sqli_007(request):
-    sql = "SELECT sno FROM blog_post WHERE title = '" + request.GET.get("p7", "") + "' OR 1=1"
+    val = request.GET.get("p7")
+    sql = "SELECT sno FROM blog_blogcomment WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_007:{len(rows)}")
 
 def sqli_008(request):
-    sql = "SELECT sno FROM blog_post WHERE LOWER(title) = LOWER('" + request.GET.get("p8", "") + "')"
+    val = request.GET.get("p8")
+    sql = "SELECT id FROM auth_user WHERE id = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_008:{len(rows)}")
 
 def sqli_009(request):
-    sql = "SELECT sno FROM blog_post WHERE content = '" + request.GET.get("p9", "") + "'"
+    val = request.GET.get("p9")
+    sql = "SELECT sno FROM blog_post WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_009:{len(rows)}")
 
 def sqli_010(request):
-    sql = "SELECT sno FROM blog_post WHERE content LIKE '%" + request.GET.get("p10", "") + "%'"
+    val = request.GET.get("p10")
+    sql = "SELECT sno FROM home_contact WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_010:{len(rows)}")
 
 def sqli_011(request):
-    sql = "SELECT * FROM blog_post WHERE content = '" + request.GET.get("p11", "") + "' LIMIT 10"
+    val = request.GET.get("p11")
+    sql = "SELECT sno FROM blog_blogcomment WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_011:{len(rows)}")
 
 def sqli_012(request):
-    sql = "SELECT COUNT(*) FROM blog_post WHERE content = '" + request.GET.get("p12", "") + "'"
+    val = request.GET.get("p12")
+    sql = "SELECT id FROM auth_user WHERE id = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_012:{len(rows)}")
 
 def sqli_013(request):
-    sql = "SELECT sno FROM blog_post WHERE content = '" + request.GET.get("p13", "") + "' ORDER BY sno DESC"
+    val = request.GET.get("p13")
+    sql = "SELECT sno FROM blog_post WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_013:{len(rows)}")
 
 def sqli_014(request):
-    sql = "SELECT sno FROM blog_post WHERE content != '" + request.GET.get("p14", "") + "'"
+    val = request.GET.get("p14")
+    sql = "SELECT sno FROM home_contact WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_014:{len(rows)}")
 
 def sqli_015(request):
-    sql = "SELECT sno FROM blog_post WHERE content = '" + request.GET.get("p15", "") + "' OR 1=1"
+    val = request.GET.get("p15")
+    sql = "SELECT sno FROM blog_blogcomment WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_015:{len(rows)}")
 
 def sqli_016(request):
-    sql = "SELECT sno FROM blog_post WHERE LOWER(content) = LOWER('" + request.GET.get("p16", "") + "')"
+    val = request.GET.get("p16")
+    sql = "SELECT id FROM auth_user WHERE id = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_016:{len(rows)}")
 
 def sqli_017(request):
-    sql = "SELECT sno FROM blog_post WHERE author = '" + request.GET.get("p17", "") + "'"
+    val = request.GET.get("p17")
+    sql = "SELECT sno FROM blog_post WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_017:{len(rows)}")
 
 def sqli_018(request):
-    sql = "SELECT sno FROM blog_post WHERE author LIKE '%" + request.GET.get("p18", "") + "%'"
+    val = request.GET.get("p18")
+    sql = "SELECT sno FROM home_contact WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_018:{len(rows)}")
 
 def sqli_019(request):
-    sql = "SELECT * FROM blog_post WHERE author = '" + request.GET.get("p19", "") + "' LIMIT 10"
+    val = request.GET.get("p19")
+    sql = "SELECT sno FROM blog_blogcomment WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_019:{len(rows)}")
 
 def sqli_020(request):
-    sql = "SELECT COUNT(*) FROM blog_post WHERE author = '" + request.GET.get("p20", "") + "'"
+    val = request.GET.get("p20")
+    sql = "SELECT id FROM auth_user WHERE id = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_020:{len(rows)}")
 
 def sqli_021(request):
-    sql = "SELECT sno FROM blog_post WHERE author = '" + request.GET.get("p21", "") + "' ORDER BY sno DESC"
+    val = request.GET.get("p21")
+    sql = "SELECT sno FROM blog_post WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_021:{len(rows)}")
 
 def sqli_022(request):
-    sql = "SELECT sno FROM blog_post WHERE author != '" + request.GET.get("p22", "") + "'"
+    val = request.GET.get("p22")
+    sql = "SELECT sno FROM home_contact WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_022:{len(rows)}")
 
 def sqli_023(request):
-    sql = "SELECT sno FROM blog_post WHERE author = '" + request.GET.get("p23", "") + "' OR 1=1"
+    val = request.GET.get("p23")
+    sql = "SELECT sno FROM blog_blogcomment WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_023:{len(rows)}")
 
 def sqli_024(request):
-    sql = "SELECT sno FROM blog_post WHERE LOWER(author) = LOWER('" + request.GET.get("p24", "") + "')"
+    val = request.GET.get("p24")
+    sql = "SELECT id FROM auth_user WHERE id = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_024:{len(rows)}")
 
 def sqli_025(request):
-    sql = "SELECT sno FROM blog_post WHERE slug = '" + request.GET.get("p25", "") + "'"
+    val = request.GET.get("p25")
+    sql = "SELECT sno FROM blog_post WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_025:{len(rows)}")
 
 def sqli_026(request):
-    sql = "SELECT sno FROM blog_post WHERE slug LIKE '%" + request.GET.get("p26", "") + "%'"
+    val = request.GET.get("p26")
+    sql = "SELECT sno FROM home_contact WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_026:{len(rows)}")
 
 def sqli_027(request):
-    sql = "SELECT * FROM blog_post WHERE slug = '" + request.GET.get("p27", "") + "' LIMIT 10"
+    val = request.GET.get("p27")
+    sql = "SELECT sno FROM blog_blogcomment WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_027:{len(rows)}")
 
 def sqli_028(request):
-    sql = "SELECT COUNT(*) FROM blog_post WHERE slug = '" + request.GET.get("p28", "") + "'"
+    val = request.GET.get("p28")
+    sql = "SELECT id FROM auth_user WHERE id = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_028:{len(rows)}")
 
 def sqli_029(request):
-    sql = "SELECT sno FROM blog_post WHERE slug = '" + request.GET.get("p29", "") + "' ORDER BY sno DESC"
+    val = request.GET.get("p29")
+    sql = "SELECT sno FROM blog_post WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_029:{len(rows)}")
 
 def sqli_030(request):
-    sql = "SELECT sno FROM blog_post WHERE slug != '" + request.GET.get("p30", "") + "'"
+    val = request.GET.get("p30")
+    sql = "SELECT sno FROM home_contact WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_030:{len(rows)}")
 
 def sqli_031(request):
-    sql = "SELECT sno FROM blog_post WHERE slug = '" + request.GET.get("p31", "") + "' OR 1=1"
+    val = request.GET.get("p31")
+    sql = "SELECT sno FROM blog_blogcomment WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_031:{len(rows)}")
 
 def sqli_032(request):
-    sql = "SELECT sno FROM blog_post WHERE LOWER(slug) = LOWER('" + request.GET.get("p32", "") + "')"
+    val = request.GET.get("p32")
+    sql = "SELECT id FROM auth_user WHERE id = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_032:{len(rows)}")
 
 def sqli_033(request):
-    sql = "SELECT sno FROM home_contact WHERE name = '" + request.GET.get("p33", "") + "'"
+    val = request.GET.get("p33")
+    sql = "SELECT sno FROM blog_post WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_033:{len(rows)}")
 
 def sqli_034(request):
-    sql = "SELECT sno FROM home_contact WHERE name LIKE '%" + request.GET.get("p34", "") + "%'"
+    val = request.GET.get("p34")
+    sql = "SELECT sno FROM home_contact WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_034:{len(rows)}")
 
 def sqli_035(request):
-    sql = "SELECT * FROM home_contact WHERE name = '" + request.GET.get("p35", "") + "' LIMIT 10"
+    val = request.GET.get("p35")
+    sql = "SELECT sno FROM blog_blogcomment WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_035:{len(rows)}")
 
 def sqli_036(request):
-    sql = "SELECT COUNT(*) FROM home_contact WHERE name = '" + request.GET.get("p36", "") + "'"
+    val = request.GET.get("p36")
+    sql = "SELECT id FROM auth_user WHERE id = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_036:{len(rows)}")
 
 def sqli_037(request):
-    sql = "SELECT sno FROM home_contact WHERE name = '" + request.GET.get("p37", "") + "' ORDER BY sno DESC"
+    val = request.GET.get("p37")
+    sql = "SELECT sno FROM blog_post WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_037:{len(rows)}")
 
 def sqli_038(request):
-    sql = "SELECT sno FROM home_contact WHERE name != '" + request.GET.get("p38", "") + "'"
+    val = request.GET.get("p38")
+    sql = "SELECT sno FROM home_contact WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_038:{len(rows)}")
 
 def sqli_039(request):
-    sql = "SELECT sno FROM home_contact WHERE name = '" + request.GET.get("p39", "") + "' OR 1=1"
+    val = request.GET.get("p39")
+    sql = "SELECT sno FROM blog_blogcomment WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_039:{len(rows)}")
 
 def sqli_040(request):
-    sql = "SELECT sno FROM home_contact WHERE LOWER(name) = LOWER('" + request.GET.get("p40", "") + "')"
+    val = request.GET.get("p40")
+    sql = "SELECT id FROM auth_user WHERE id = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_040:{len(rows)}")
 
 def sqli_041(request):
-    sql = "SELECT sno FROM home_contact WHERE email = '" + request.GET.get("p41", "") + "'"
+    val = request.GET.get("p41")
+    sql = "SELECT sno FROM blog_post WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_041:{len(rows)}")
 
 def sqli_042(request):
-    sql = "SELECT sno FROM home_contact WHERE email LIKE '%" + request.GET.get("p42", "") + "%'"
+    val = request.GET.get("p42")
+    sql = "SELECT sno FROM home_contact WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_042:{len(rows)}")
 
 def sqli_043(request):
-    sql = "SELECT * FROM home_contact WHERE email = '" + request.GET.get("p43", "") + "' LIMIT 10"
+    val = request.GET.get("p43")
+    sql = "SELECT sno FROM blog_blogcomment WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_043:{len(rows)}")
 
 def sqli_044(request):
-    sql = "SELECT COUNT(*) FROM home_contact WHERE email = '" + request.GET.get("p44", "") + "'"
+    val = request.GET.get("p44")
+    sql = "SELECT id FROM auth_user WHERE id = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_044:{len(rows)}")
 
 def sqli_045(request):
-    sql = "SELECT sno FROM home_contact WHERE email = '" + request.GET.get("p45", "") + "' ORDER BY sno DESC"
+    val = request.GET.get("p45")
+    sql = "SELECT sno FROM blog_post WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_045:{len(rows)}")
 
 def sqli_046(request):
-    sql = "SELECT sno FROM home_contact WHERE email != '" + request.GET.get("p46", "") + "'"
+    val = request.GET.get("p46")
+    sql = "SELECT sno FROM home_contact WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_046:{len(rows)}")
 
 def sqli_047(request):
-    sql = "SELECT sno FROM home_contact WHERE email = '" + request.GET.get("p47", "") + "' OR 1=1"
+    val = request.GET.get("p47")
+    sql = "SELECT sno FROM blog_blogcomment WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_047:{len(rows)}")
 
 def sqli_048(request):
-    sql = "SELECT sno FROM home_contact WHERE LOWER(email) = LOWER('" + request.GET.get("p48", "") + "')"
+    val = request.GET.get("p48")
+    sql = "SELECT id FROM auth_user WHERE id = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_048:{len(rows)}")
 
 def sqli_049(request):
-    sql = "SELECT sno FROM home_contact WHERE phone = '" + request.GET.get("p49", "") + "'"
+    val = request.GET.get("p49")
+    sql = "SELECT sno FROM blog_post WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_049:{len(rows)}")
 
 def sqli_050(request):
-    sql = "SELECT sno FROM home_contact WHERE phone LIKE '%" + request.GET.get("p50", "") + "%'"
+    val = request.GET.get("p50")
+    sql = "SELECT sno FROM home_contact WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_050:{len(rows)}")
 
 def sqli_051(request):
-    sql = "SELECT * FROM home_contact WHERE phone = '" + request.GET.get("p51", "") + "' LIMIT 10"
+    val = request.GET.get("p51")
+    sql = "SELECT sno FROM blog_blogcomment WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_051:{len(rows)}")
 
 def sqli_052(request):
-    sql = "SELECT COUNT(*) FROM home_contact WHERE phone = '" + request.GET.get("p52", "") + "'"
+    val = request.GET.get("p52")
+    sql = "SELECT id FROM auth_user WHERE id = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_052:{len(rows)}")
 
 def sqli_053(request):
-    sql = "SELECT sno FROM home_contact WHERE phone = '" + request.GET.get("p53", "") + "' ORDER BY sno DESC"
+    val = request.GET.get("p53")
+    sql = "SELECT sno FROM blog_post WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_053:{len(rows)}")
 
 def sqli_054(request):
-    sql = "SELECT sno FROM home_contact WHERE phone != '" + request.GET.get("p54", "") + "'"
+    val = request.GET.get("p54")
+    sql = "SELECT sno FROM home_contact WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_054:{len(rows)}")
 
 def sqli_055(request):
-    sql = "SELECT sno FROM home_contact WHERE phone = '" + request.GET.get("p55", "") + "' OR 1=1"
+    val = request.GET.get("p55")
+    sql = "SELECT sno FROM blog_blogcomment WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_055:{len(rows)}")
 
 def sqli_056(request):
-    sql = "SELECT sno FROM home_contact WHERE LOWER(phone) = LOWER('" + request.GET.get("p56", "") + "')"
+    val = request.GET.get("p56")
+    sql = "SELECT id FROM auth_user WHERE id = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_056:{len(rows)}")
 
 def sqli_057(request):
-    sql = "SELECT sno FROM home_contact WHERE content = '" + request.GET.get("p57", "") + "'"
+    val = request.GET.get("p57")
+    sql = "SELECT sno FROM blog_post WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_057:{len(rows)}")
 
 def sqli_058(request):
-    sql = "SELECT sno FROM home_contact WHERE content LIKE '%" + request.GET.get("p58", "") + "%'"
+    val = request.GET.get("p58")
+    sql = "SELECT sno FROM home_contact WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_058:{len(rows)}")
 
 def sqli_059(request):
-    sql = "SELECT * FROM home_contact WHERE content = '" + request.GET.get("p59", "") + "' LIMIT 10"
+    val = request.GET.get("p59")
+    sql = "SELECT sno FROM blog_blogcomment WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_059:{len(rows)}")
 
 def sqli_060(request):
-    sql = "SELECT COUNT(*) FROM home_contact WHERE content = '" + request.GET.get("p60", "") + "'"
+    val = request.GET.get("p60")
+    sql = "SELECT id FROM auth_user WHERE id = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_060:{len(rows)}")
 
 def sqli_061(request):
-    sql = "SELECT sno FROM home_contact WHERE content = '" + request.GET.get("p61", "") + "' ORDER BY sno DESC"
+    val = request.GET.get("p61")
+    sql = "SELECT sno FROM blog_post WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_061:{len(rows)}")
 
 def sqli_062(request):
-    sql = "SELECT sno FROM home_contact WHERE content != '" + request.GET.get("p62", "") + "'"
+    val = request.GET.get("p62")
+    sql = "SELECT sno FROM home_contact WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_062:{len(rows)}")
 
 def sqli_063(request):
-    sql = "SELECT sno FROM home_contact WHERE content = '" + request.GET.get("p63", "") + "' OR 1=1"
+    val = request.GET.get("p63")
+    sql = "SELECT sno FROM blog_blogcomment WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_063:{len(rows)}")
 
 def sqli_064(request):
-    sql = "SELECT sno FROM home_contact WHERE LOWER(content) = LOWER('" + request.GET.get("p64", "") + "')"
+    val = request.GET.get("p64")
+    sql = "SELECT id FROM auth_user WHERE id = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_064:{len(rows)}")
 
 def sqli_065(request):
-    sql = "SELECT sno FROM blog_blogcomment WHERE comment = '" + request.GET.get("p65", "") + "'"
+    val = request.GET.get("p65")
+    sql = "SELECT sno FROM blog_post WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_065:{len(rows)}")
 
 def sqli_066(request):
-    sql = "SELECT sno FROM blog_blogcomment WHERE comment LIKE '%" + request.GET.get("p66", "") + "%'"
+    val = request.GET.get("p66")
+    sql = "SELECT sno FROM home_contact WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_066:{len(rows)}")
 
 def sqli_067(request):
-    sql = "SELECT * FROM blog_blogcomment WHERE comment = '" + request.GET.get("p67", "") + "' LIMIT 10"
+    val = request.GET.get("p67")
+    sql = "SELECT sno FROM blog_blogcomment WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_067:{len(rows)}")
 
 def sqli_068(request):
-    sql = "SELECT COUNT(*) FROM blog_blogcomment WHERE comment = '" + request.GET.get("p68", "") + "'"
+    val = request.GET.get("p68")
+    sql = "SELECT id FROM auth_user WHERE id = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_068:{len(rows)}")
 
 def sqli_069(request):
-    sql = "SELECT sno FROM blog_blogcomment WHERE comment = '" + request.GET.get("p69", "") + "' ORDER BY sno DESC"
+    val = request.GET.get("p69")
+    sql = "SELECT sno FROM blog_post WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_069:{len(rows)}")
 
 def sqli_070(request):
-    sql = "SELECT sno FROM blog_blogcomment WHERE comment != '" + request.GET.get("p70", "") + "'"
+    val = request.GET.get("p70")
+    sql = "SELECT sno FROM home_contact WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_070:{len(rows)}")
 
 def sqli_071(request):
-    sql = "SELECT sno FROM blog_blogcomment WHERE comment = '" + request.GET.get("p71", "") + "' OR 1=1"
+    val = request.GET.get("p71")
+    sql = "SELECT sno FROM blog_blogcomment WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_071:{len(rows)}")
 
 def sqli_072(request):
-    sql = "SELECT sno FROM blog_blogcomment WHERE LOWER(comment) = LOWER('" + request.GET.get("p72", "") + "')"
+    val = request.GET.get("p72")
+    sql = "SELECT id FROM auth_user WHERE id = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_072:{len(rows)}")
 
 def sqli_073(request):
-    sql = "SELECT sno FROM auth_user WHERE username = '" + request.GET.get("p73", "") + "'"
+    val = request.GET.get("p73")
+    sql = "SELECT sno FROM blog_post WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_073:{len(rows)}")
 
 def sqli_074(request):
-    sql = "SELECT sno FROM auth_user WHERE username LIKE '%" + request.GET.get("p74", "") + "%'"
+    val = request.GET.get("p74")
+    sql = "SELECT sno FROM home_contact WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_074:{len(rows)}")
 
 def sqli_075(request):
-    sql = "SELECT * FROM auth_user WHERE username = '" + request.GET.get("p75", "") + "' LIMIT 10"
+    val = request.GET.get("p75")
+    sql = "SELECT sno FROM blog_blogcomment WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_075:{len(rows)}")
 
 def sqli_076(request):
-    sql = "SELECT COUNT(*) FROM auth_user WHERE username = '" + request.GET.get("p76", "") + "'"
+    val = request.GET.get("p76")
+    sql = "SELECT id FROM auth_user WHERE id = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_076:{len(rows)}")
 
 def sqli_077(request):
-    sql = "SELECT sno FROM auth_user WHERE username = '" + request.GET.get("p77", "") + "' ORDER BY sno DESC"
+    val = request.GET.get("p77")
+    sql = "SELECT sno FROM blog_post WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_077:{len(rows)}")
 
 def sqli_078(request):
-    sql = "SELECT sno FROM auth_user WHERE username != '" + request.GET.get("p78", "") + "'"
+    val = request.GET.get("p78")
+    sql = "SELECT sno FROM home_contact WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_078:{len(rows)}")
 
 def sqli_079(request):
-    sql = "SELECT sno FROM auth_user WHERE username = '" + request.GET.get("p79", "") + "' OR 1=1"
+    val = request.GET.get("p79")
+    sql = "SELECT sno FROM blog_blogcomment WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_079:{len(rows)}")
 
 def sqli_080(request):
-    sql = "SELECT sno FROM auth_user WHERE LOWER(username) = LOWER('" + request.GET.get("p80", "") + "')"
+    val = request.GET.get("p80")
+    sql = "SELECT id FROM auth_user WHERE id = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_080:{len(rows)}")
 
 def sqli_081(request):
-    sql = "SELECT sno FROM auth_user WHERE email = '" + request.GET.get("p81", "") + "'"
+    val = request.GET.get("p81")
+    sql = "SELECT sno FROM blog_post WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_081:{len(rows)}")
 
 def sqli_082(request):
-    sql = "SELECT sno FROM auth_user WHERE email LIKE '%" + request.GET.get("p82", "") + "%'"
+    val = request.GET.get("p82")
+    sql = "SELECT sno FROM home_contact WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_082:{len(rows)}")
 
 def sqli_083(request):
-    sql = "SELECT * FROM auth_user WHERE email = '" + request.GET.get("p83", "") + "' LIMIT 10"
+    val = request.GET.get("p83")
+    sql = "SELECT sno FROM blog_blogcomment WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_083:{len(rows)}")
 
 def sqli_084(request):
-    sql = "SELECT COUNT(*) FROM auth_user WHERE email = '" + request.GET.get("p84", "") + "'"
+    val = request.GET.get("p84")
+    sql = "SELECT id FROM auth_user WHERE id = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_084:{len(rows)}")
 
 def sqli_085(request):
-    sql = "SELECT sno FROM auth_user WHERE email = '" + request.GET.get("p85", "") + "' ORDER BY sno DESC"
+    val = request.GET.get("p85")
+    sql = "SELECT sno FROM blog_post WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_085:{len(rows)}")
 
 def sqli_086(request):
-    sql = "SELECT sno FROM auth_user WHERE email != '" + request.GET.get("p86", "") + "'"
+    val = request.GET.get("p86")
+    sql = "SELECT sno FROM home_contact WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_086:{len(rows)}")
 
 def sqli_087(request):
-    sql = "SELECT sno FROM auth_user WHERE email = '" + request.GET.get("p87", "") + "' OR 1=1"
+    val = request.GET.get("p87")
+    sql = "SELECT sno FROM blog_blogcomment WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_087:{len(rows)}")
 
 def sqli_088(request):
-    sql = "SELECT sno FROM auth_user WHERE LOWER(email) = LOWER('" + request.GET.get("p88", "") + "')"
+    val = request.GET.get("p88")
+    sql = "SELECT id FROM auth_user WHERE id = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_088:{len(rows)}")
 
 def sqli_089(request):
-    sql = "SELECT sno FROM auth_user WHERE first_name = '" + request.GET.get("p89", "") + "'"
+    val = request.GET.get("p89")
+    sql = "SELECT sno FROM blog_post WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_089:{len(rows)}")
 
 def sqli_090(request):
-    sql = "SELECT sno FROM auth_user WHERE first_name LIKE '%" + request.GET.get("p90", "") + "%'"
+    val = request.GET.get("p90")
+    sql = "SELECT sno FROM home_contact WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_090:{len(rows)}")
 
 def sqli_091(request):
-    sql = "SELECT * FROM auth_user WHERE first_name = '" + request.GET.get("p91", "") + "' LIMIT 10"
+    val = request.GET.get("p91")
+    sql = "SELECT sno FROM blog_blogcomment WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_091:{len(rows)}")
 
 def sqli_092(request):
-    sql = "SELECT COUNT(*) FROM auth_user WHERE first_name = '" + request.GET.get("p92", "") + "'"
+    val = request.GET.get("p92")
+    sql = "SELECT id FROM auth_user WHERE id = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_092:{len(rows)}")
 
 def sqli_093(request):
-    sql = "SELECT sno FROM auth_user WHERE first_name = '" + request.GET.get("p93", "") + "' ORDER BY sno DESC"
+    val = request.GET.get("p93")
+    sql = "SELECT sno FROM blog_post WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_093:{len(rows)}")
 
 def sqli_094(request):
-    sql = "SELECT sno FROM auth_user WHERE first_name != '" + request.GET.get("p94", "") + "'"
+    val = request.GET.get("p94")
+    sql = "SELECT sno FROM home_contact WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()
     return HttpResponse(f"sqli_094:{len(rows)}")
 
 def sqli_095(request):
-    sql = "SELECT sno FROM auth_user WHERE first_name = '" + request.GET.get("p95", "") + "' OR 1=1"
+    val = request.GET.get("p95")
+    sql = "SELECT sno FROM blog_blogcomment WHERE sno = " + val
     with connection.cursor() as cursor:
         cursor.execute(sql)
         rows = cursor.fetchall()

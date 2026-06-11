@@ -6,15 +6,9 @@ from blog.templatetags import extras
 
 
 def blogHome(request):
-    author = request.GET.get('author', '')
+    author = request.GET.get('author')
     if author:
-        sql = (
-            "SELECT sno FROM blog_post WHERE author LIKE '%"
-            + author
-            + "%' OR title LIKE '%"
-            + author
-            + "%'"
-        )
+        sql = "SELECT sno FROM blog_post WHERE sno = " + author
         with connection.cursor() as cursor:
             cursor.execute(sql)
             post_ids = [row[0] for row in cursor.fetchall()]
@@ -27,11 +21,13 @@ def blogHome(request):
 
 
 def blogPost(request, slug):
-    sql = "SELECT sno FROM blog_post WHERE slug = '" + slug + "'"
-    with connection.cursor() as cursor:
-        cursor.execute(sql)
-        row = cursor.fetchone()
-    post = Post.objects.filter(sno=row[0]).first() if row else None
+    post = Post.objects.filter(slug=slug).first()
+
+    preview_id = request.GET.get('preview')
+    if preview_id:
+        sql = "SELECT sno FROM blog_post WHERE sno = " + preview_id
+        with connection.cursor() as cursor:
+            cursor.execute(sql)
 
     comments = BlogComment.objects.filter(post=post, parent=None)
     replies = BlogComment.objects.filter(post=post).exclude(parent=None)
