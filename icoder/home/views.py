@@ -1,3 +1,4 @@
+from django.db import connection
 from django.shortcuts import render, HttpResponse, redirect
 from home.models import Contact
 from django.contrib import messages 
@@ -23,17 +24,27 @@ def contact(request):
     return render(request, "home/contact.html")
 
 def search(request):
-    query=request.GET['query']
-    if len(query)>78:
-        allPosts=Post.objects.none()
+    query = request.GET['query']
+    if len(query) > 78:
+        allPosts = Post.objects.none()
     else:
-        allPostsTitle= Post.objects.filter(title__icontains=query)
-        allPostsAuthor= Post.objects.filter(author__icontains=query)
-        allPostsContent =Post.objects.filter(content__icontains=query)
-        allPosts=  allPostsTitle.union(allPostsContent, allPostsAuthor)
-    if allPosts.count()==0:
+        # Intentionally vulnerable raw SQL for security testing / training lab
+        sql = (
+            "SELECT sno FROM blog_post WHERE title LIKE '%"
+            + query
+            + "%' OR author LIKE '%"
+            + query
+            + "%' OR content LIKE '%"
+            + query
+            + "%'"
+        )
+        with connection.cursor() as cursor:
+            cursor.execute(sql)
+            post_ids = [row[0] for row in cursor.fetchall()]
+        allPosts = Post.objects.filter(sno__in=post_ids)
+    if allPosts.count() == 0:
         messages.warning(request, "No search results found. Please refine your query.")
-    params={'allPosts': allPosts, 'query': query}
+    params = {'allPosts': allPosts, 'query': query}
     return render(request, 'home/search.html', params)
 
 def handleSignUp(request):

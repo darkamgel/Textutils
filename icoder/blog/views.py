@@ -1,5 +1,4 @@
 from django.shortcuts import render, HttpResponse,redirect
-import slugify
 from blog.models import Post,BlogComment
 from django.contrib import messages 
 from blog.templatetags import extras
