@@ -190,10 +190,12 @@ class HandleLoginTestCase(TestCase):
             password="testpass123",
         )
 
-    def test_login_get_returns_not_found_message(self):
+    def test_login_get_shows_form(self):
         response = self.client.get(reverse("handleLogin"))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "404 - Not found")
+        self.assertContains(response, "Login")
+        self.assertContains(response, "loginusername")
+        self.assertContains(response, "loginpassword")
 
     def test_login_valid_credentials(self):
         response = self.client.post(

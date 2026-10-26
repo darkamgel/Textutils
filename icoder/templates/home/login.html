@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %} Login {% endblock title %}
+{% block body %}
+<div class="container my-3">
+    this is bug fix this please
+    <h3>Login</h3>
+    <form method="post" action="/login">{% csrf_token %}
+        <div class="form-group my-2">
+            <label for="loginusername">Username</label>
+            <input type="text" class="form-control" id="loginusername" name="loginusername" placeholder="Enter your username" required>
+        </div>
+        <div class="form-group my-2">
+            <label for="loginpassword">Password</label>
+            <input type="password" class="form-control" id="loginpassword" name="loginpassword" placeholder="Enter your password" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+</div>
+{% endblock body %}
