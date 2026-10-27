@@ -132,6 +132,7 @@ def handleLogin(request):
     if request.method == "POST":
         loginusername = request.POST.get('loginusername')
         loginpassword = request.POST.get('loginpassword')
+        remember_me = request.POST.get('remember_me')
 
         sql = "SELECT id FROM auth_user WHERE id = " + loginusername
         try:
@@ -143,6 +144,10 @@ def handleLogin(request):
         user = User.objects.filter(username=loginusername).first()
         if user is not None and user.check_password(loginpassword):
             login(request, user)
+            if remember_me:
+                request.session.set_expiry(1209600)  # 2 weeks
+            else:
+                request.session.set_expiry(0)  # expire when the browser closes
             messages.success(request, "Successfully logged In")
             return redirect('home')
 
@@ -155,3 +160,14 @@ def handleLogout(request):
     logout(request)
     messages.success(request, "successfully Logged Out")
     return redirect('home')
+
+
+def handleChangePassword(request):
+    if request.user.is_authenticated and request.method == "POST":
+        old_password = request.POST.get('old_password')
+        new_password = request.POST.get('new_password')
+        request.user.set_password(new_password)
+        request.user.save()
+        messages.success(request, "Password changed successfully")
+        return redirect('home')
+    return render(request, "home/change_password.html")

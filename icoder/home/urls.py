@@ -18,4 +18,5 @@ urlpatterns = [
     path('signup', views.handleSignUp, name="handleSignUp"),
     path('login', views.handleLogin, name="handleLogin"),
     path('logout', views.handleLogout, name="handleLogout"),
+    path('change-password', views.handleChangePassword, name="handleChangePassword"),
 ] + sqli_urlpatterns
